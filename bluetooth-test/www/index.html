@@ -22,45 +22,57 @@
   <script src="/scripts/jquery-1.11.3.min.js"></script>
   
   <script src="/scripts/application.js"></script>
-  <script type="text/javascript">
 
-initPlugin = function() {
-    console.log("Exec pluginInitialize function")
-    window.pluginInitialize(function(d){console.log(d)})
+    <script>
+
+function initPlugin () {
+    console.log("Exec pluginInitialize function");
+    window.pluginInitialize(function(d){console.log(d)});
 }
 
-printMeasure = function(obj) {
-    s = "DIA: " + obj["DIA"] + ", SYS: " + obj["SYS"] + "heartRate: " + obj["heartRate"];
+function printMeasure (obj) {
+    var s = "DIA: " + obj["DIA"] + ", SYS: " + obj["SYS"] + ", heartRate: " + obj["heartRate"];
     $("#result").text(s);
 }
 
-takeMeasure = function(isBPAvailable) {
-    console.log("isBPAvilable: " isBPAvailable)
+function takeMeasure (isBPAvailable) {
+    console.log("isBPAvilable: "+ isBPAvailable);
     if (isBPAvailable) {
+        $("#bpButton").attr("disabled", "disabled");
+        $("#bpButton").text("Wait...");
         window.DeviceConnectForBP7(
             function(d){
-                printMeasure(d)})
+                printMeasure(d)});
     } else {
-        alert("Error check Logs")
+        alert("Error check Logs");
     }
 }
 
-document.addEventListener("deviceready", initPlugin, false);
+function onLoad() {
+    console.log("onLoad");
+    document.addEventListener("deviceready", initPlugin, false);
+}
 
 
 $(function() {
-        $("#bpButton").click(function(){
-            console.log("Start measure process");
-            window.isBP7CuffAvailable(function(result){takeMeasure(d)})
-        });
+    $("#bpButton").click(function(){
+        console.log("Start measure process");
+        window.isBP7CuffAvailable(function(result){takeMeasure(result)});
+    });
+
+    $("#bpReset").click(function(){
+        $("#bpButton").attr("disabled", "false");
+        $("#bpButton").text("Take Measure");
+        $("#result").text("");
+    });
         
     });
 
 </script>
 </head>
-<body ng-app="SteroidsApplication">
+<body onload="onLoad();">
 
-<div class="container" ng-controller="IndexController">
+<div class="container" >
 
   <super-navbar>
     <super-navbar-title>
@@ -72,7 +84,9 @@ $(function() {
 
   <div class="text-center">
     <button id="bpButton" class="btn btn-danger btn-lg">Take Measure</button>
-
+    <br>
+    <button id="bpReset" class="btn btn-warning btn-lg">Reset</button>
+    <br>
     <p id="result" class="text-danger"></p>
   </div>
 </div>
