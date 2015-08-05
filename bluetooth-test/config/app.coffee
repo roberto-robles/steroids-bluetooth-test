@@ -2,7 +2,7 @@
 
 module.exports =
   app:
-    name: "bluetooth-test"
+    name: "iHealth Cordova Demo"
 
   # steroidsAppId and steroidsApiKey headers are required by Supersonic Data
   # network:
