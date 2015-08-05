@@ -23,12 +23,40 @@
   
   <script src="/scripts/application.js"></script>
   <script type="text/javascript">
-    $(function() {
-      $("#bpButton").click(function(){
-        alert("BP");
-      })
+
+initPlugin = function() {
+    console.log("Exec pluginInitialize function")
+    window.pluginInitialize(function(d){console.log(d)})
+}
+
+printMeasure = function(obj) {
+    s = "DIA: " + obj["DIA"] + ", SYS: " + obj["SYS"] + "heartRate: " + obj["heartRate"];
+    $("#result").text(s);
+}
+
+takeMeasure = function(isBPAvailable) {
+    console.log("isBPAvilable: " isBPAvailable)
+    if (isBPAvailable) {
+        window.DeviceConnectForBP7(
+            function(d){
+                printMeasure(d)})
+    } else {
+        alert("Error check Logs")
+    }
+}
+
+document.addEventListener("deviceready", initPlugin, false);
+
+
+$(function() {
+        $("#bpButton").click(function(){
+            console.log("Start measure process");
+            window.isBP7CuffAvailable(function(result){takeMeasure(d)})
+        });
+        
     });
-  </script>
+
+</script>
 </head>
 <body ng-app="SteroidsApplication">
 
@@ -36,14 +64,16 @@
 
   <super-navbar>
     <super-navbar-title>
-      iHealth Cordova Demi
+      iHealth Cordova Demo
     </super-navbar-title>
   </super-navbar>
-
+  <br>
   <p>Usage: Just click in the red button below. This Demo requires that the iHealth BP7 Cuff has been previously paired with the iOS Device</p>
 
   <div class="text-center">
-    <button id="bpButton" class="btn btn-default btn-lg">Take Measure</button>
+    <button id="bpButton" class="btn btn-danger btn-lg">Take Measure</button>
+
+    <p id="result" class="text-danger"></p>
   </div>
 </div>
 
