@@ -38,8 +38,8 @@ function printMeasure (obj) {
 function takeMeasure (isBPAvailable) {
     console.log("isBPAvilable: "+ isBPAvailable);
     if (isBPAvailable) {
-        $("#bpButton").attr("disabled", "disabled");
-        $("#bpButton").text("Wait...");
+        $("#bpButton, #bpButton5").attr("disabled", "disabled");
+        $("#bpButton, #bpButton5").text("Wait...");
         window.DeviceConnectForBP7(
             function(d){
                 printMeasure(d)});
@@ -60,9 +60,17 @@ $(function() {
         window.isBP7CuffAvailable(function(result){takeMeasure(result)});
     });
 
+    $("#bpButton5").click(function(){
+        console.log("Start measure process");
+        window.isBP5CuffAvailable(function(result){takeMeasure(result)});
+    });
+
     $("#bpReset").click(function(){
-        $("#bpButton").attr("disabled", "false");
+        $("#bpButton").removeAttr("disabled");
         $("#bpButton").text("Take Measure");
+        $("#bpButton5").removeAttr("disabled");
+        $("#bpButton5").text("Take Measure");
+        
         $("#result").text("");
     });
         
@@ -83,7 +91,10 @@ $(function() {
   <p>Usage: Just click in the red button below. This Demo requires that the iHealth BP7 Cuff has been previously paired with the iOS Device</p>
 
   <div class="text-center">
-    <button id="bpButton" class="btn btn-danger btn-lg btn-block">Take Measure</button>
+    <button id="bpButton" class="btn btn-danger btn-lg btn-block">Take BP7 Measure</button>
+    <br>
+    <br>
+    <button id="bpButton5" class="btn btn-danger btn-lg btn-block">Take BP5 Measure</button>
     <br>
     <br>
     <button id="bpReset" class="btn btn-warning btn-lg btn-block">Reset</button>
